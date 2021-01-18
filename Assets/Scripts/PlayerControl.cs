@@ -4,31 +4,42 @@ using UnityEngine;
 
 public class PlayerControl : MonoBehaviour
 {
+    public bool isControlled;
+
     public float speed;
-    float moveDirection;
+    protected float moveDirection;
 
     public float jumpVelocity;
     public float cayoteJumpDuration;
-    bool jumpPressed = false;
-    float jumpTimer = 0.0f;
+    protected bool jumpPressed = false;
+    protected float jumpTimer = 0.0f;
 
     public GameObject groundTriggerObject;
-    GroundTrigger groundTrigger;
+    protected GroundTrigger groundTrigger;
     
-    Rigidbody2D body;
+    protected Rigidbody2D body;
 
-    SpriteRenderer sprite;
+    protected SpriteRenderer sprite;
 
-    void Start()
+    public GameObject charaChangerTriggerObject;
+    CharaChangerTrigger charaChangerTrigger;
+
+    protected virtual void Start()
     {
         body = GetComponent<Rigidbody2D>();
         groundTrigger = groundTriggerObject.GetComponent<GroundTrigger>();
         sprite = GetComponent<SpriteRenderer>();
+        enabled = isControlled;
+        if (enabled)
+        {
+            sprite.sortingOrder = 5;
+        }
+        charaChangerTrigger = charaChangerTriggerObject.GetComponent<CharaChangerTrigger>();
     }
 
-    void Update()
+    protected virtual void Update()
     {
-        if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
         {
             jumpPressed = true;
         }
@@ -37,19 +48,27 @@ public class PlayerControl : MonoBehaviour
             jumpPressed = false;
         }
 
+        if (Input.GetKeyDown(KeyCode.X) || Input.GetKeyDown(KeyCode.K))
+        {
+            if (charaChangerTrigger.otherCharacter != null)
+            {
+                ChangeThisCharacter(charaChangerTrigger.otherCharacter);
+            }
+        }
+
         moveDirection = Input.GetAxis("Horizontal");
 
         if (moveDirection > 0)
         {
-            sprite.flipX = false;
+            transform.localScale = new Vector2(1, 1);
         }
         else if (moveDirection < 0)
         {
-            sprite.flipX = true;
+            transform.localScale = new Vector2(-1, 1);
         }
     }
 
-    void FixedUpdate() 
+    protected virtual void FixedUpdate() 
     {
         if (groundTrigger.isGrounded)
         {
@@ -72,4 +91,22 @@ public class PlayerControl : MonoBehaviour
 
         body.velocity = new Vector2(moveDirection * speed, body.velocity.y);
     }
+
+    public void ChangeThisCharacter(PlayerControl otherCharacter)
+    {
+        sprite.sortingOrder = 1;
+        otherCharacter.enabled = true;
+        body.velocity = Vector2.zero;
+        otherCharacter.sprite.sortingOrder = 5;
+        enabled = false;
+    }
+
+    // public void SwitchToThis()
+    // {
+    //     if (!this.enabled)
+    //     {
+    //         this.enabled = true;
+    //         this.sprite.sortingOrder = 5;
+    //     }
+    // }
 }

@@ -36,7 +36,13 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\CharaChangerTrigger.cs" />
+     <Compile Include="Assets\Scripts\CharacterBlue.cs" />
+     <Compile Include="Assets\Scripts\CharacterRed.cs" />
+     <Compile Include="Assets\Scripts\ColorAndLayer.cs" />
+     <Compile Include="Assets\Scripts\Goal.cs" />
      <Compile Include="Assets\Scripts\GroundTrigger.cs" />
+     <Compile Include="Assets\Scripts\Platform.cs" />
      <Compile Include="Assets\Scripts\PlayerControl.cs" />
     <Reference Include="UnityEngine">
         <HintPath>D:/GameDev/Unity/2019.4.16f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
